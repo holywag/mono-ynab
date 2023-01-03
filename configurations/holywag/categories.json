@@ -1,0 +1,215 @@
+[
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "🐖  Pets"
+        },
+        "criterias": {
+            "mcc": [ 5995 ],
+            "payee": [
+                "Ajbolit"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏢  Legal",
+            "name": "⚖️  Lawyer"
+        },
+        "criterias": {
+            "mcc": [ 7277 ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🌍  Quality of Life",
+            "name": "🍽  Dining out"
+        },
+        "criterias": {
+            "mcc": [ 5811, 5812, 5814 ],
+            "payee": [ 
+                "Glovo",
+                "414960\\*\\*\\*\\*4188",
+                "516874\\*\\*\\*\\*8722",
+                "Rosteria Sergii",
+                "Романія Ц\\."
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🎩  Maksym",
+            "name": "🍺  Fun"
+        },
+        "criterias": {
+            "payee": [
+                "Mixologia",
+                "Zmist",
+                "545708\\*\\*\\*\\*5670"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "🍞  Groceries"
+        },
+        "criterias": { 
+            "mcc": [ 5499, 5411 ],
+            "payee": [
+                "FOPSitnikovIgorIgorovi",
+                "414960\\*\\*\\*\\*4532"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "🚖  Transportation"
+        },
+        "criterias": {
+            "mcc": [ 4111, 4112, 4121 ],
+            "payee": [
+                "LIQPAY\\*ECOS",
+                "LIQPAY\\*E\\-wingsScooters",
+                "ZELECTRA",
+                "LIQPAY\\*FOP Yagodkina O",
+                "FDY\\*Computer_SSL"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "🚛  Delivery"
+        },
+        "criterias": { 
+            "mcc": [ 4215 ],
+            "payee": [
+                "Нова пошта",
+                "Novapay"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "🪣  Households"
+        },
+        "criterias": { 
+            "mcc": [ 5943 ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏠  Sweet home",
+            "name": "🪑  Homeware"
+        },
+        "criterias": {
+            "mcc": [ 5200, 5211 ],
+            "payee": [
+                "STYL(?: 1|3 YURKIV HR)?"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏠  Sweet home",
+            "name": "💡  Electric"
+        },
+        "criterias": {
+            "payee": [
+                "Електроенергія"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏠  Sweet home",
+            "name": "💧  Water"
+        },
+        "criterias": {
+            "payee": [
+                "Холодна вода",
+                "Холодна вода (водовідведення)",
+                "Iнше"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏠  Sweet home",
+            "name": "🔥  Natural Gas"
+        },
+        "criterias": {
+            "payee": [
+                "Газ",
+                "Газ (доставлення)"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🏠  Sweet home",
+            "name": "⚒️  Services"
+        },
+        "criterias": {
+            "payee": [
+                "Домофон",
+                "414962\\*\\*\\*\\*7633"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🌍  Quality of Life",
+            "name": "🖥  Devices"
+        },
+        "criterias": { 
+            "mcc": [ 4812 ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "📀  Software"
+        },
+        "criterias": { 
+            "mcc": [ 5815 ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🍎  Everyday",
+            "name": "📡  Communication"
+        },
+        "criterias": { 
+            "mcc": [ 4814 ],
+            "payee": [
+                "Інтернет і ТБ",
+                "Starlink Internet"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🎩  Maksym",
+            "name": "💇🏻‍♂️  Beauty"
+        },
+        "criterias": { 
+            "mcc": [ 7230 ],
+            "payee": [
+                "G\\.Bar Iryna"
+            ]
+        }
+    },
+    {
+        "ynab_category": {
+            "group": "🌍  Quality of Life",
+            "name": "✈️  Vacation"
+        },
+        "criterias": {
+            "mcc": [ 7011 ]
+        }
+    }
+]

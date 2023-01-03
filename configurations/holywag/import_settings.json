@@ -1,0 +1,17 @@
+{
+    "bank": {
+        "token": "<your_monobank_token>",
+        "n_retries": 5,
+        "time_range": {
+            "start": "2022-09-26 18:00:00+03:00",
+            "end": null
+        }
+    },
+    "ynab": {
+        "token": "<your_ynab_token>",
+        "budget_name": "<your_ynab_budget_name>"
+    },
+    "remove_cancelled_statements": true,
+    "merge_transfer_statements": true,
+    "remember_last_import_timestamp": true
+}

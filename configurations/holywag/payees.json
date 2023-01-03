@@ -1,0 +1,198 @@
+{
+    "YNAB": [
+        "YouNeedABudget com"
+    ],
+    "Book Store": [
+        "Yakaboo"
+    ],
+    "Bank": [
+        "УБКИ"
+    ],
+    "Amazon": [
+        "AMZNMktplace",
+        "AMZNMKTPLACE AMAZON\\.CO\\,1 PRINCIPAL PLC, WORSHIP,AMAZON\\.CO\\.UK,GB"
+    ],
+    "Opticshop": [
+        "Alensa"
+    ],
+    "Vet Clinic": [
+        "Ajbolit"
+    ],
+    "Pet Shop": [
+        "ZoomarketZOOPROFI",
+        "BRIDER",
+        "BeliZoo"
+    ],
+    "Hotel": [
+        "HOTEL KHRESCHATYK",
+        "HOTEL IMPRESSA"
+    ],
+    "Gym": [
+        "FOP MALANIUK NAZARII (?:IHOR|I)",
+        "PHitnestsentrInterfit"
+    ],
+    "Food Delivery": [
+        "Замовлення їжі wayforpay",
+        "414960\\*\\*\\*\\*4188",
+        "516874\\*\\*\\*\\*8722",
+        "Glovo",
+        "LА П’ЄЦ",
+        "545708\\*\\*\\*\\*4860",
+        "545708\\*\\*\\*\\*6507",
+        "FDY\\*chubibum",
+        "beerclub10\\.if\\.ua\\.1",
+        "WFPFASTFOOD1",
+        "Романія Ц\\.",
+        "chubibum",
+        "CHubiBumdostavkapitsi",
+        "FOP Mironova TA"
+    ],
+    "Cafe": [
+        "Rosterija Kavi",
+        "Rosteriyakavi",
+        "Ростерія Кави",
+        "Rosteria Sergii",
+        "PABPiatnitsia1",
+        "Zavertaylo",
+        "COFFEE SHOP 2018",
+        "Cinnabon",
+        "Пузата Хата",
+        "BUCK Coffee Roasters",
+        "Каффа",
+        "KapheSHampanerija1",
+        "Kavjarnjanatrusha",
+        "Urban Space 100",
+        "Moun Coffee",
+        "WFP\\.EDA",
+        "MAMA-MANANA",
+        "CoffeeDOOR brew bar",
+        "Кавоварка",
+        "Vafel",
+        "InshiPark",
+        "KapheSHampanerija",
+        "TerasaBochka",
+        "414960\\*\\*\\*\\*4532",
+        "FABBRICA",
+        "Italiiets iz Beiruta",
+        "Fishki Coffee"
+    ],
+    "Hookah Bar": [
+        "Mixologia",
+        "Zmist",
+        "545708\\*\\*\\*\\*5670",
+        "414962\\*\\*\\*\\*9082",
+        "Богдана Г\\."
+    ],
+    "Supermarket": [
+        "NashIndik",
+        "SHOP\\.SILPO\\.UA4",
+        "Сільпо",
+        "STYL 5 GRYGORIV TM",
+        "FOPSitnikovIgorIgorovi",
+        "My Water Shop",
+        "METRO",
+        "LIQPAY\\*TOV ZAKAZ\\.YuA",
+        "MasloTOM",
+        "ФК ЕВО",
+        "zakaz\\.ua",
+        "АТБ",
+        "PekarnyanaStanislavski",
+        "MAGAZYN 1212"
+    ],
+    "Household Shop": [
+        "Magazin7903",
+        "LIQPAY\\*Kitchen-Profi",
+        "VsiSvoYi",
+        "USUPSO",
+        "MARKER",
+        "STYL(?: 1|3 YURKIV HR)?",
+        "Епіцентр",
+        "Ars",
+        "JYSK"
+    ],
+    "Street Food": [
+        "DonadsClub",
+        "MS Doner"
+    ],
+    "Scooters": [
+        "(?:Скасування\\. )?Bolt",
+        "ZELECTRA",
+        "LIQPAY\\*E-wingsScooters",
+        "LIQPAY\\*ECOS",
+        "LIQPAY\\*FOP Yagodkina O",
+        "FDY\\*Computer_SSL",
+        "BOLT\\.EU/R/2210131035"
+    ],
+    "Metro": [
+        "Київське метро"
+    ],
+    "Taxi": [
+        "Uklon"
+    ],
+    "Hardware Store": [
+        "FOP SCHERBAK YU.I.",
+        "Appleroomua",
+        "swipeua"
+    ],
+    "Utilities": [
+        "Холодна вода",
+        "Холодна вода (водовідведення)",
+        "Iнше",
+        "Електроенергія",
+        "Газ",
+        "Газ (доставлення)",
+        "Домофон"
+    ],
+    "Post Services": [
+        "Нова пошта",
+        "Novapay"
+    ],
+    "Barber": [
+        "Perukarnia Barbershop(?: Gen)",
+        "ALS Barbershop"
+    ],
+    "Beauty Salon": [
+        "G\\.Bar Iryna",
+        "GBAR"
+    ],
+    "Cellular Provider": [
+        "Vodafone\\n\\d{12}",
+        "Київстар(\\n\\+\\d{12})?",
+        "iBOX"
+    ],
+    "Internet Provider": [
+        "Інтернет і ТБ"
+    ],
+    "Courses": [
+        "Оплата освітніх послуг wayforpay"
+    ],
+    "Clinic": [
+        "Klinika Andriya Lukash(?:uka)"
+    ],
+    "Laboratory": [
+        "Synevo"
+    ],
+    "Pharmacy": [
+        "Мед-Сервіс",
+        "Apteka zdorova rodyna",
+        "Apteka 78",
+        "ANC_VOLYN_13",
+        "APTEKAR",
+        "Перша соціальна аптека",
+        "Мережа аптек D\\.S\\.",
+        "Аптека АНЦ",
+        "Аптека Копійка"
+    ],
+    "Railway Services": [
+        "Укрзалізниця"
+    ],
+    "Clothing Store": [
+        "Dodo Socks",
+        "Levi’s",
+        "FOPKostenkoKolambiy",
+        "S\\.UA\\.18\\.03"
+    ],
+    "Cleaning Services": [
+        "414962\\*\\*\\*\\*7633"
+    ]
+}
