@@ -7,27 +7,41 @@ from rx.scheduler.eventloop import AsyncIOScheduler
 import os
 import model
 import filters
+import itertools
 
-def request_statements(conf):
-    # TODO: add configuration to statement/transaction objects
-    return rx.from_future(asyncio.create_task(request_statements(conf)))
+class RequestEngine:
+    def __init__(self):
+        self.handlers = []
 
-async def send_transactions(transactions):
-    pass
+    def add_transaction_handler(self, handler):
+        self.handlers.append(handler)
 
-async def main(configs_dir):
-    while True:
+    def __execute_handlers(self, t):
+        for handler in self.handlers:
+            handler(t)
+
+    @staticmethod
+    def __async_call(task_func):
+        def __call_async_func(*args, **kwargs):
+            return rx.from_future(asyncio.create_task(task_func(*args, **kwargs)))
+        return __call_async_func
+
+    async def __request_statements(self, configuration):
+        # TODO: add configuration to statement/transaction objects
+        pass
+
+    async def run(self, configs_dir):
         rx.from_iterable(os.listdir(configs_dir)) \
             .pipe(
                 op.map(lambda p: os.path.join(configs_dir, p)),
                 op.filter(os.path.isdir),
                 op.map(model.configuration.Configuration),
-                op.flat_map(request_statements),
+                op.flat_map(self.__async_call(self.__request_statements)),
                 op.retry(3),
                 op.map(model.monobank_statement.BankStatement),
                 op.filter(filters.TransferFilter()),
                 op.map(model.ynab_transaction.YnabTransactionConverter()),
-                op.buffer_with_count(100)
+                op.do_action(on_next = self.__execute_handlers),
             ) \
             .subscribe(
                 on_next=lambda trans: asyncio.ensure_future(send_transactions(trans)),
