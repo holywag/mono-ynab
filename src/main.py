@@ -72,14 +72,18 @@ class RequestEngine:
     async def __main(self, configs_observable: rx.Observable):
         configs_observable \
             .pipe(
+                # TODO: calculate new time range, implement overriding
                 op.flat_map(lambda conf: rx.from_future(asyncio.create_task(self.__request_statements(conf)))),
                 op.merge_all(),
                 # op.retry(3),
+                # TODO: adapt transfer filter
                 # # op.filter(filters.TransferFilter()),
+                # TODO: adapt transaction converter
                 # # op.map(model.ynab_transaction.YnabTransactionConverter()),
                 *(op.do(o) for o in self.observers)
             ) \
             .subscribe(
+                # TODO: store the updated time range configuration
                 scheduler=AsyncIOScheduler(asyncio.get_running_loop())
             )
 
