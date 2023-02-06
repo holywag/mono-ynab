@@ -1,17 +1,6 @@
-from collections import namedtuple
-import re
+import re, typing
 from datetime import datetime
 from dataclasses import dataclass
-import typing
-
-BankImportSettings = namedtuple('BankImportSettings', 'token n_retries time_range')
-TimeRangeSettings = namedtuple('TimeRangeSettings', 'start end')
-YnabImportSettings = namedtuple('YnabImportSettings', 'token budget_name')
-Account = namedtuple('Account', 'enabled ynab_name iban transfer_payee')
-StatementFieldSettings = namedtuple('StatementFieldSettings', 
-    'accounts_by_transfer_payee_regex categories_by_mcc categories_by_payee_regex payee_aliases_by_payee_regex')
-YnabCategory = namedtuple('YnabCategory', 'group name')
-RegexItem = namedtuple('RegexItem', 'regex_key value')
 
 @dataclass
 class Configuration:
