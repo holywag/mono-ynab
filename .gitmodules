@@ -1,0 +1,3 @@
+[submodule "api/mono-api"]
+	path = api/mono-api
+	url = https://github.com/holywag/mono-api.git

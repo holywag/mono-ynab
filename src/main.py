@@ -10,6 +10,8 @@ import filters
 import itertools
 import random
 import traceback
+import monobank
+import configuration_parser
 
 class FakeConfiguration:
     def __init__(self, file_path):
@@ -25,17 +27,6 @@ class FakeStmt:
     
     def __repr__(self):
         return f'FakeStmt(conf="{self.conf}", stmt="{self.stmt}")'
-
-class FakeObserver(rx.typing.Observer):
-    def on_next(self, value):
-        logging.debug(f'FakeObserver: on_next({value})')
-
-    def on_completed(self):
-        logging.debug('FakeObserver: on_completed()')
-
-    def on_error(self, error):
-        logging.error(f'FakeObserver: on_error({error})')
-
 
 class UploadObserver(rx.typing.Observer):
     def __init__(self):
@@ -67,6 +58,7 @@ class RequestEngine:
 
     async def __request_statements(self, configuration):
         # TODO: implement real logic of request
+        # mono_api = monobank.MonobankApi(monobank.ApiClient(token))
         # TODO: add configuration to statement/transaction objects
         sleep_duration = random.randrange(1, 10)
         logging.info(f'request_statements: sleep_duration={sleep_duration} configuration={configuration}')
@@ -77,33 +69,24 @@ class RequestEngine:
             FakeStmt('stmt2', configuration),
             FakeStmt('stmt3', configuration)])
 
-    async def __main(self):
-        # conf_observable = rx.from_iterable(os.listdir(configs_dir)) \
-        #     .pipe(
-        #         op.map(lambda p: os.path.join(configs_dir, p)),
-        #         op.filter(os.path.isdir),
-        #         # op.map(model.configuration.Configuration),
-        #         op.map(FakeConfiguration),
-        rx.from_list([
-            FakeConfiguration('file_path1'),
-            FakeConfiguration('file_path2')
-        ]) \
-        .pipe(
-            op.flat_map(lambda conf: rx.from_future(asyncio.create_task(self.__request_statements(conf)))),
-            op.merge_all(),
-            # op.retry(3),
-            # # op.filter(filters.TransferFilter()),
-            # # op.map(model.ynab_transaction.YnabTransactionConverter()),
-            *(op.do(o) for o in self.observers)
-        ) \
-        .subscribe(
-            scheduler=AsyncIOScheduler(asyncio.get_running_loop())
-        )
+    async def __main(self, configs_observable: rx.Observable):
+        configs_observable \
+            .pipe(
+                op.flat_map(lambda conf: rx.from_future(asyncio.create_task(self.__request_statements(conf)))),
+                op.merge_all(),
+                # op.retry(3),
+                # # op.filter(filters.TransferFilter()),
+                # # op.map(model.ynab_transaction.YnabTransactionConverter()),
+                *(op.do(o) for o in self.observers)
+            ) \
+            .subscribe(
+                scheduler=AsyncIOScheduler(asyncio.get_running_loop())
+            )
 
-    def run(self):
+    def run(self, configs_observable: rx.Observable):
         logging.info('Creating loop')
         loop = asyncio.new_event_loop()
-        loop.create_task(self.__main())
+        loop.create_task(self.__main(configs_observable))
         aws = asyncio.all_tasks(loop)
         logging.info('Running loop tasks')
         while len(aws) > 0:
@@ -118,4 +101,4 @@ if __name__ == '__main__':
 
     engine = RequestEngine()
     engine.add_transaction_observer(UploadObserver())
-    engine.run()
+    engine.run(configuration_parser.from_filesystem('./configurations'))
