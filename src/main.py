@@ -12,6 +12,7 @@ import random
 import traceback
 import monobank
 import configuration_parser
+from pathlib import Path
 
 class FakeConfiguration:
     def __init__(self, file_path):
@@ -46,8 +47,9 @@ class UploadObserver(rx.typing.Observer):
         logging.debug(f'UploadObserver on_completed')
         asyncio.create_task(self.send_transactions())
 
-    def on_error(self, error):
+    def on_error(self, error: Exception):
         logging.error(f'UploadObserver: on_error({error})')
+        traceback.print_tb(error.__traceback__)
 
 class RequestEngine:
     def __init__(self):
@@ -65,9 +67,7 @@ class RequestEngine:
         await asyncio.sleep(sleep_duration)
         logging.info(f'request_statements: configuration={configuration} DONE')
         return rx.from_list([
-            FakeStmt('stmt1', configuration),
-            FakeStmt('stmt2', configuration),
-            FakeStmt('stmt3', configuration)])
+            FakeStmt('stmt1', configuration)])
 
     async def __main(self, configs_observable: rx.Observable):
         configs_observable \
@@ -101,4 +101,4 @@ if __name__ == '__main__':
 
     engine = RequestEngine()
     engine.add_transaction_observer(UploadObserver())
-    engine.run(configuration_parser.from_filesystem('./configurations'))
+    engine.run(configuration_parser.from_filesystem(Path('./configurations')))
