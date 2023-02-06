@@ -1,4 +1,5 @@
-import re, typing
+import re
+from typing import Any
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -45,14 +46,14 @@ class StatementFieldSettings:
 Mcc = int
 
 class RegexList(list):
-    def get(self, key, default=None, condition=lambda _: True) -> str:
+    def get(self, key: str, default: Any = None, condition=lambda _: True) -> str:
         return next((r.value for r in self if r.regex_key.match(key) and condition(r.value)), default)
 
 @dataclass
 class RegexItem:
     regex_key: re.Pattern
-    value: typing.Any
+    value: Any
 
-    def __init__(self, patterns: list[str], value: typing.Any):
+    def __init__(self, patterns: list[str], value: Any):
         self.regex_key=re.compile(f'(?:{"|".join(patterns)})')
         self.value=value
