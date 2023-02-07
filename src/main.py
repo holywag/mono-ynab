@@ -47,8 +47,8 @@ class RequestEngine:
     def add_transaction_observer(self, observer):
         self.observers.append(observer)
 
-    async def __main(self, configs_observable: rx.typing.Observable[model.configuration.Configuration]):
-        configs_observable \
+    async def __main(self):
+        configuration_parser.from_filesystem(Path('./configurations')) \
             .pipe(
                 # TODO: calculate new time range, implement overriding
                 op.flat_map(monobank_api.from_configuration),
@@ -64,10 +64,10 @@ class RequestEngine:
                 scheduler=AsyncIOScheduler(asyncio.get_running_loop())
             )
 
-    def run(self, configs_observable: rx.typing.Observable[model.configuration.Configuration]):
+    def run(self):
         logging.info('Creating loop')
         loop = asyncio.new_event_loop()
-        loop.create_task(self.__main(configs_observable))
+        loop.create_task(self.__main())
         aws = asyncio.all_tasks(loop)
         logging.info('Running loop tasks')
         while len(aws) > 0:
@@ -82,4 +82,4 @@ if __name__ == '__main__':
 
     engine = RequestEngine()
     engine.add_transaction_observer(UploadObserver())
-    engine.run(configuration_parser.from_filesystem(Path('./configurations')))
+    engine.run()
