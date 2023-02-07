@@ -47,7 +47,7 @@ class RequestEngine:
     def add_transaction_observer(self, observer):
         self.observers.append(observer)
 
-    async def __main(self):
+    async def run(self):
         configuration_parser.from_filesystem(Path('./configurations')) \
             .pipe(
                 # TODO: calculate new time range, implement overriding
@@ -64,16 +64,6 @@ class RequestEngine:
                 scheduler=AsyncIOScheduler(asyncio.get_running_loop())
             )
 
-    def run(self):
-        logging.info('Creating loop')
-        loop = asyncio.new_event_loop()
-        loop.create_task(self.__main())
-        aws = asyncio.all_tasks(loop)
-        logging.info('Running loop tasks')
-        while len(aws) > 0:
-            loop.run_until_complete(asyncio.gather(*aws))
-            aws = asyncio.all_tasks(loop)
-
 if __name__ == '__main__':
     logging.basicConfig(
         format='%(asctime)s %(levelname)-8s %(message)s',
@@ -82,4 +72,12 @@ if __name__ == '__main__':
 
     engine = RequestEngine()
     engine.add_transaction_observer(UploadObserver())
-    engine.run()
+    
+    logging.info('Creating loop')
+    loop = asyncio.new_event_loop()
+    loop.create_task(engine.run())
+    aws = asyncio.all_tasks(loop)
+    logging.info('Running loop tasks')
+    while len(aws) > 0:
+        loop.run_until_complete(asyncio.gather(*aws))
+        aws = asyncio.all_tasks(loop)
