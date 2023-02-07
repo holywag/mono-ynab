@@ -3,7 +3,7 @@ from pathlib import Path
 from rx import operators as op
 from model.configuration import *
 
-def from_filesystem(configs_dir: Path):
+def from_filesystem(configs_dir: Path) -> rx.typing.Observable[Configuration]:
     return rx.from_iterable(configs_dir.iterdir()) \
         .pipe(
             op.filter(lambda p: p.is_dir()),

@@ -10,24 +10,13 @@ import filters
 import itertools
 import random
 import traceback
-import monobank
+import typing
 import configuration_parser
 from pathlib import Path
-
-class FakeConfiguration:
-    def __init__(self, file_path):
-        self.file_path = file_path
-    
-    def __repr__(self):
-        return f'FakeConfiguration("{self.file_path}")'
-
-class FakeStmt:
-    def __init__(self, stmt, conf):
-        self.conf = conf
-        self.stmt = stmt
-    
-    def __repr__(self):
-        return f'FakeStmt(conf="{self.conf}", stmt="{self.stmt}")'
+from datetime import datetime
+from model import bank_statement
+import json
+import monobank_api
 
 class UploadObserver(rx.typing.Observer):
     def __init__(self):
@@ -48,7 +37,7 @@ class UploadObserver(rx.typing.Observer):
         asyncio.create_task(self.send_transactions())
 
     def on_error(self, error: Exception):
-        logging.error(f'UploadObserver: on_error({error})')
+        logging.error(f'UploadObserver: on_error({error.__class__.__name__}: {error})')
         traceback.print_tb(error.__traceback__)
 
 class RequestEngine:
@@ -58,23 +47,11 @@ class RequestEngine:
     def add_transaction_observer(self, observer):
         self.observers.append(observer)
 
-    async def __request_statements(self, configuration):
-        # TODO: implement real logic of request
-        # mono_api = monobank.MonobankApi(monobank.ApiClient(token))
-        # TODO: add configuration to statement/transaction objects
-        sleep_duration = random.randrange(1, 10)
-        logging.info(f'request_statements: sleep_duration={sleep_duration} configuration={configuration}')
-        await asyncio.sleep(sleep_duration)
-        logging.info(f'request_statements: configuration={configuration} DONE')
-        return rx.from_list([
-            FakeStmt('stmt1', configuration)])
-
-    async def __main(self, configs_observable: rx.Observable):
+    async def __main(self, configs_observable: rx.typing.Observable[model.configuration.Configuration]):
         configs_observable \
             .pipe(
                 # TODO: calculate new time range, implement overriding
-                op.flat_map(lambda conf: rx.from_future(asyncio.create_task(self.__request_statements(conf)))),
-                op.merge_all(),
+                op.flat_map(monobank_api.from_configuration),
                 # op.retry(3),
                 # TODO: adapt transfer filter
                 # # op.filter(filters.TransferFilter()),
@@ -87,7 +64,7 @@ class RequestEngine:
                 scheduler=AsyncIOScheduler(asyncio.get_running_loop())
             )
 
-    def run(self, configs_observable: rx.Observable):
+    def run(self, configs_observable: rx.typing.Observable[model.configuration.Configuration]):
         logging.info('Creating loop')
         loop = asyncio.new_event_loop()
         loop.create_task(self.__main(configs_observable))
