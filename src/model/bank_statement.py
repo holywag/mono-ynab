@@ -6,9 +6,9 @@ from model.configuration import Configuration, Account
 class BankStatement:
     configuration: Configuration
     account: Account
+    transfer_account: Account
     id: str
     time: datetime
-    amount: float
+    amount: int
     mcc: int
-    payee: str
     description: str
