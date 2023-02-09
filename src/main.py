@@ -97,8 +97,7 @@ class RequestEngine:
                 # TODO: calculate new time range, implement overriding
                 op.flat_map(monobank_api.from_configuration),
                 # op.retry(3),
-                # TODO: adapt tranfer filter
-                # op.filter(filters.TransferFilter()),
+                op.filter(filters.TransferFilter()),
                 *(op.do(o()) for o in self.observers),
             ) \
             .subscribe(

@@ -1,9 +1,11 @@
 from model.bank_statement import BankStatement
 
 class TransferFilter:
-    """Filter object that prevents duplication of transfers between two YNAB accounts.
-    If a pair of transactions that describe a single transfer appear in a single set, 
-    YNAB will register both of them independently. This filter object will remove one in each pair.
+    """Filter object that prevents duplication of transfers between two accounts.
+    The transfer operation is usually represented by two transactions, importing 
+    both of them will double the transfer amount.
+    This filter object will filter out the 2nd transaction in a pair of transactions
+    that describe the same transfer operation.
     """
 
     def __init__(self):
