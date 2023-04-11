@@ -12,15 +12,19 @@ def from_filesystem(configs_dir: Path) -> rx.typing.Observable[Configuration]:
 
 def parse_config_from_json(config_dir: Path):
     return JsonConfiguration(
+        config_dir,
         json.load(open(config_dir / 'import_settings.json')),
         json.load(open(config_dir / 'accounts.json')),
         json.load(open(config_dir / 'categories.json')),
         json.load(open(config_dir / 'payees.json')))
 
+@dataclass
 class JsonConfiguration(Configuration):
-    def __init__(self, import_settings_json, accounts_json, categories_json, payees_json):
+    path: Path
+
+    def __init__(self, path, import_settings_json, accounts_json, categories_json, payees_json):
+        self.path = path
         self.merge_transfer_statements = import_settings_json['merge_transfer_statements']
-        self.remember_last_import_timestamp = import_settings_json['remember_last_import_timestamp']
         bank_settings = import_settings_json['bank'].copy()
         bank_settings['time_range'] = TimeRangeSettings(
             **{k: v and datetime.fromisoformat(v) for k,v in bank_settings['time_range'].items()})

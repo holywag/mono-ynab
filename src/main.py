@@ -20,7 +20,33 @@ import monobank_api
 from ynab_api_wrapper import YnabApiWrapper, SingleBudgetYnabApiWrapper, YnabTransactionFields
 from collections import defaultdict
 
-class UploadObserver(rx.typing.Observer):
+def send_transactions(scheduler = rx.typing.Scheduler) -> rx.typing.Observer[model.bank_statement.BankStatement]:
+    rx.pipe(
+        op.group_by(lambda s: s.configuration.path)
+    )
+
+
+    __ynab_api = None
+    def ynab_api():
+        global __ynab_api
+        if not __ynab_api:
+            __ynab_api = SingleBudgetYnabApiWrapper(YnabApiWrapper(config.token), config.budget_name)
+        return __ynab_api
+
+    subject = rx.subject.Subject()
+    ynab_api_observable = subject.pipe(
+            op.)
+     subject.pipe
+        .pipe(
+            op.first()
+            op.skip(1)
+            op.zip(rx.repeat_value())
+        )
+    subject.subscribe(scheduler=scheduler)
+    return subject
+
+
+class UploadObserver(rx.typing.Observer[model.bank_statement.BankStatement]):
     """
     An instance of this observer works on a single configuration, i.e.
     it will remember ynab settings of the initial transaction and apply
@@ -38,10 +64,7 @@ class UploadObserver(rx.typing.Observer):
         return self.__ynab_api
 
     async def send_transactions(self):
-        sleep_duration = random.randrange(2, 5)
-        logging.info(f'UploadObserver: send_transactions sleep_duration={sleep_duration} n={len(self.transactions)} {self.transactions}')
-        await asyncio.sleep(sleep_duration)
-        logging.info(f'UploadObserver: send_transactions DONE')
+        logging.info(f'TODO: send_transactions n={len(self.transactions)} {self.transactions}')
 
     def on_next(self, stmt: bank_statement.BankStatement):
         logging.debug(f'UploadObserver on_next stmt={stmt}')
@@ -65,45 +88,60 @@ class UploadObserver(rx.typing.Observer):
         self.transactions.append(ynab_fields)
     
     def on_completed(self):
-        logging.debug(f'UploadObserver on_completed')
+        logging.info(f'UploadObserver on_completed')
+        # TODO await
         asyncio.create_task(self.send_transactions())
 
     def on_error(self, error: Exception):
         logging.error(f'UploadObserver: on_error({error.__class__.__name__}: {error})')
-        traceback.print_tb(error.__traceback__)
+
+class TimeRangeCalculator(rx.typing.Observer[model.configuration.Configuration]):
+    def __init__(self, override_start: datetime = None, override_end: datetime = None):
+        self.override_start = override_start
+        self.override_end = override_end
+        self.configs = []
+
+    def on_next(self, configuration: model.configuration.Configuration):
+        time_range = configuration.bank.time_range
+        if self.override_start:
+            time_range.start = self.override_start
+        elif time_range.end:
+            time_range.start = time_range.end
+        elif not time_range.start:
+            raise ValueError('Cannot calculate new time range start: neither end time is set, nor override start time is proveded.')
+        time_range.end = self.override_end and self.override_end or datetime.now(tz=time_range.start.tzinfo)
+        if time_range.end < time_range.start:
+            raise ValueError(
+                f'Invalid time range settings: start({time_range.start}) is later then end({time_range.end})')
+        self.configs.append(configuration)
+    
+    def on_completed(self):
+        logging.debug('TimeRangeCalculator on_completed')
+        # TODO
+        logging.info(f'TODO: store the following {len(self.configs)} configurations: {self.configs}')
+
+    def on_error(self, error):
+        logging.error(f'TimeRangeCalculator: on_error({error.__class__.__name__}: {error})')
 
 class RequestEngine:
     def __init__(self):
         self.observers = []
 
-    def add_transaction_observer(self, observer, group_by_configuration=False):
-        """Add an observer to the chain of transactions.
-
-        If group_by_configuration is True, the chain of transactions from all configurations
-            is groupped by configuration and the observer is created and subscribed to each 
-            transaction chain separately.
-        If group_by_configuration is False, the observer is created once and subscribed to
-            a single chain of transactions fetched from all configurations.
-        """
-        if group_by_configuration:
-            self.observers.append(observer)
-        else:
-            observer = observer()
-            self.observers.append(lambda: observer)
+    def add_group_observer(self, observer):
+        self.observers.append(observer)
 
     async def run(self):
-        configuration_parser.from_filesystem(Path('./configurations')) \
+        scheduler = AsyncIOScheduler(asyncio.get_running_loop())
+        await configuration_parser.from_filesystem(Path('./configurations')) \
             .pipe(
-                # TODO: calculate new time range, implement overriding
+                op.subscribe_on(scheduler),
+                op.do(TimeRangeCalculator()),
+                # TODO make single json file
                 op.flat_map(monobank_api.from_configuration),
                 # op.retry(3),
                 op.filter(filters.TransferFilter()),
-                *(op.do(o()) for o in self.observers),
-            ) \
-            .subscribe(
-                # TODO: store the updated time range configuration
-                on_error=lambda error: logging.error(f'{error.__class__.__name__}: {error}') or traceback.print_tb(error.__traceback__),
-                scheduler=AsyncIOScheduler(asyncio.get_running_loop())
+                *(op.do(o) for o in self.observers),
+                op.do_action(on_error=lambda error: logging.error(f'{error.__class__.__name__}: {error}') or traceback.print_tb(error.__traceback__)),
             )
 
 if __name__ == '__main__':
@@ -113,7 +151,7 @@ if __name__ == '__main__':
         datefmt='%Y-%m-%d %H:%M:%S')
 
     engine = RequestEngine()
-    engine.add_transaction_observer(UploadObserver, group_by_configuration=True)
+    engine.add_group_observer(UploadObserver)
     
     logging.info('Creating loop')
     loop = asyncio.new_event_loop()

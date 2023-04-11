@@ -56,7 +56,6 @@ class StatementFieldSettings:
 @dataclass
 class Configuration:
     merge_transfer_statements: bool
-    remember_last_import_timestamp: bool
     bank: BankImportSettings
     ynab: YnabImportSettings
     accounts: list[Account]
